@@ -1,0 +1,4 @@
+创建git仓库 ： git init 
+创建并切换分支： git checkout -b name
+生成ssh文件 ：ssh-keygen -t rsa
+查看已修改但没有提交 ： git status
