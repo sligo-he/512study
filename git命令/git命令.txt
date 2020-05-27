@@ -2,3 +2,13 @@
 创建并切换分支： git checkout -b name
 生成ssh文件 ：ssh-keygen -t rsa
 查看已状态 ： git status
+查看版本号 ：git reflog 
+回退到指定版本 ：git reset --gard + 版本号
+git branch 查看本地分支
+git brabch -a 查看远程分支
+git brabch -d name : 删除本地分支 -D强制删除
+git branch -r -d origin/name ：删除远程分支
+git push origin :name :将本地操作推送到远程
+git checkout name : 切换分支
+git merge name : 合并name分支内容到本分支
+
