@@ -1,0 +1,34 @@
+安装xampp和bugfree的过程及其问题详解
+版本： xampp-win32-1.7.4-VC6-installer.exe；bugfree2.1.2。
+安装xampp：
+安装目录选择C盘之外的其它磁盘，据某些网友的经验，在Windonws7或Vista中，如果选择C盘安装，由于权限原因，会出现创建一些文件失败的问题。然后按照默认选项，依次下一步，最后完成安装。
+安装xampp后最常见的问题就是apache不能启动或启动后马上停止。本人经过一天的努力，将网上所有的解决方法收集整理，相信总有一个方法能解决你的问题。
+1．	80端口冲突，解决方法：
+打开目录D:\xampp\apache\conf(我的安装目录为D:\xampp)下的httpd.conf文件，将
+Listen 80和ServerName localhost:80中的80改为8812或其它值，要保持一致。
+2．	监听端口443冲突(比如LR的端口)，解决方法：
+        打开目录D:\xampp\apache\conf\extra (我的安装目录为D:\xampp)下的httpd-ssl.conf文件，将Listen 443这句注释掉：# Listen 443或将443改为4433或其它数字。
+3．	Apache启动后又马上停止，原因可能是由于安装了oracle10g，与其中的perl5lib变量发生了冲突，解决方法有3种：
+(1)	打开目录D:\xampp\apache\conf(我的安装目录为D:\xampp)下的httpd.conf文件，
+将Include "conf/extra/httpd-perl.conf"注释掉：# Include "conf/extra/httpd-perl.conf"。
+(2)	打开目录D:\xampp\apache\conf\extra (我的安装目录为D:\xampp)下的httpd-perl.conf文件，找到LoadModule perl_module modules/mod_perl.so，在下面一行增加PerlSwitches –T，保存文件即可。
+(3)	修改环境变量：在环境变量path中增加D:\xampp\perl\lib; D:\xampp\perl\site\lib;即可。
+前两种方法的任一种都能解决我遇到的apache启动后又马上停止的问题，第3种方法不能解决我遇到这个问题，可能对某些网友有用，所以也把它写了出来，以供参考。
+其它方法：
+	下面的解决方法也是网友在实际中用到的，不过本人觉得可行性不高或讲不清是什么原理，只是写出来，供大家参考，也许由于你的原因特殊，正好解决你的问题。
+
+查apache的日志，发现错误是：WSASocket failed to open the inherited socket
+
+1 关闭占用80端口的进程。
+	在“运行”中输入cmd命令，打开dos窗口，输入命令：netstat –ano 找到占用80端口的进程，然后打任务管理器窗口，根据进程ID关闭该进程。
+
+2 修改网络设置，全部设置
+   (1) 网上邻居——本地连接——属性——internet协议(TCP/IP)——属性——高级——wins标签——去掉“启用LMHOSTS查询(L)”前的勾。(这个方法可用！！！！！！)
+
+(2) 控制面板——Windows防火墙——“高级”标签——本地连接——设置——“服务”标签——勾选“安全web服务器(HTTPS)。
+
+(3) 如果上两步做了还不行，就直接关掉防火墙的服务，将服务中的Windows Firewall/Internet Connection Sharing (ICS的服务关掉了，发现问题解决了，apache可以用了。对于安全问题可以选择第3方的防火墙来解决。 )
+
+(4) 如果还不行，最后一招：打开命令行，输入netsh winsock reset
+apache应该就可以用了。
+ 
